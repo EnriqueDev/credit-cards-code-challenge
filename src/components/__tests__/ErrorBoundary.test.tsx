@@ -43,5 +43,6 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     )
     expect(container).toHaveTextContent('Whoops! Something went wrong!')
+    expect(console.error).toHaveBeenCalledTimes(2)
   })
 })

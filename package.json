@@ -1,0 +1,23 @@
+{
+  "name": "react-parcel-typescript-starter",
+  "version": "0.0.1",
+  "description": "React typescript with parcel bundler",
+  "main": "index.js",
+  "repository": "https://github.com/overnight-dev/react-parcel-typescript-starter.git",
+  "author": "Enrique Martín García <enriquem.developer@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
+  }
+}

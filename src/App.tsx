@@ -5,14 +5,17 @@ import CheckCredit from './modules/CheckCredit'
 import { checkCredit } from './router/routes'
 import NotFound from './modules/NotFound'
 import { Reset } from './reset.css'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const App: React.FC = () => {
   return (
-    <Router history={browserHistory}>
-      <Reset />
-      <Route component={CheckCredit} exact path={checkCredit} />
-      <Route component={NotFound} />
-    </Router>
+    <ErrorBoundary>
+      <Router history={browserHistory}>
+        <Reset />
+        <Route component={CheckCredit} exact path={checkCredit} />
+        <Route component={NotFound} />
+      </Router>
+    </ErrorBoundary>
   )
 }
 

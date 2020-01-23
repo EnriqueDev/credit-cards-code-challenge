@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "jsx": "preserve",
+    "jsx": "react",
     "esModuleInterop": true,
     "strict": true,
     "moduleResolution": "node",

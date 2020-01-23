@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Router, Route } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import { browserHistory } from './router/browserHistory'
 import CheckCredit from './modules/CheckCredit'
 import { checkCredit } from './router/routes'
@@ -12,8 +12,10 @@ const App: React.FC = () => {
     <ErrorBoundary>
       <Router history={browserHistory}>
         <Reset />
-        <Route component={CheckCredit} exact path={checkCredit} />
-        <Route component={NotFound} />
+        <Switch>
+          <Route component={CheckCredit} exact path={checkCredit} />
+          <Route path="*" exact component={NotFound} />
+        </Switch>
       </Router>
     </ErrorBoundary>
   )

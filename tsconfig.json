@@ -3,12 +3,11 @@
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve",
+    "esModuleInterop": true,
     "strict": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "~*": ["src/app/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

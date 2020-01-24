@@ -1,29 +1,16 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { RaisedContainer } from '../../components/RaisedContainer'
-import TextInput, { StyledErrorText } from './TextInput/TextInput'
-import Select from 'react-select'
+import { TextInput, FormFieldContainer } from './components'
 import Button from '../../components/Button'
 import { validateName, validateOccupation, validateIncome } from './validation'
+import Select, { ValueType, GroupType, OptionTypeBase } from 'react-select'
 
-export type SelectOption = {
-  value: string
-  label: string
-}
-
-const SELECT_OPTIONS: SelectOption[] = [
+const SELECT_OPTIONS = [
   { value: 'full_time', label: 'Full Time' },
   { value: 'part_time', label: 'Part Time' },
   { value: 'student', label: 'Student' },
 ]
-
-const SelectContainer = styled.div`
-  position: relative;
-`
-
-const SelectError = styled(StyledErrorText)`
-  bottom: -15px;
-`
 
 const Container = styled.section`
   display: flex;
@@ -34,20 +21,15 @@ const Container = styled.section`
 `
 
 const StyledTextInput = styled(TextInput)`
-  margin-top: 30px;
   min-width: 250px;
-
-  &:first-child {
-    margin-top: 0;
-  }
 `
 
-const StyledSelect = styled(Select)`
-  margin-top: 40px;
+const StyledFormWrapper = styled(FormFieldContainer)`
+  margin-bottom: 30px;
 `
 
 const StyledButton = styled(Button)`
-  margin-top: 40px;
+  margin-top: 10px;
   width: 100%;
 `
 
@@ -56,7 +38,7 @@ export const CheckCredit: React.FC = () => {
   const [nameError, setNameError] = React.useState<string | null>(null)
   const [income, setIncome] = React.useState<string>('')
   const [incomeError, setIncomeError] = React.useState<string | null>(null)
-  const [occupation, setOccupation] = React.useState<SelectOption | null>(null)
+  const [occupation, setOccupation] = React.useState<unknown | null>(null)
   const [occupationError, setOccupationError] = React.useState<string | null>(
     null,
   )
@@ -93,32 +75,32 @@ export const CheckCredit: React.FC = () => {
   return (
     <Container>
       <RaisedContainer as="form">
-        <StyledTextInput
-          label={'Name'}
-          placeholder={'John Smith'}
-          value={name}
-          error={nameError}
-          onChange={e => setName(e.currentTarget.value)}
-        />
-        <StyledTextInput
-          label={'Yearly Income'}
-          placeholder={'30000'}
-          min={0}
-          value={income}
-          type={'number'}
-          error={incomeError}
-          onChange={e => setIncome(e.currentTarget.value)}
-        />
-        <SelectContainer>
-          <StyledSelect
+        <StyledFormWrapper label={'Name'} error={nameError}>
+          <StyledTextInput
+            placeholder={'John Smith'}
+            value={name}
+            onChange={e => setName(e.currentTarget.value)}
+          />
+        </StyledFormWrapper>
+
+        <StyledFormWrapper label={'Yearly Income'} error={incomeError}>
+          <StyledTextInput
+            placeholder={'30000'}
+            min={0}
+            value={income}
+            type={'number'}
+            onChange={e => setIncome(e.currentTarget.value)}
+          />
+        </StyledFormWrapper>
+
+        <StyledFormWrapper error={occupationError} label={'Occupation'}>
+          <Select
             placeholder="Select your occupation"
             options={SELECT_OPTIONS}
-            onChange={(value: SelectOption) => setOccupation(value)}
+            onChange={(value, _) => setOccupation(value)}
           />
-          {Boolean(occupationError) && (
-            <SelectError>{occupationError}</SelectError>
-          )}
-        </SelectContainer>
+        </StyledFormWrapper>
+
         <StyledButton onClick={handleOnSubmit}>Submit</StyledButton>
       </RaisedContainer>
     </Container>

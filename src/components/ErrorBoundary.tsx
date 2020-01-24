@@ -2,8 +2,12 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 const ErrorBoundaryContainer = styled.section`
+  margin: 0 auto;
+  max-width: 920px;
   display: flex;
+  flex-direction: column;
   flex: 1 0 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
 `

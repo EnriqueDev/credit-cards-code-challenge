@@ -4,7 +4,7 @@ import { RaisedContainer } from '../../components/RaisedContainer'
 import { TextInput, FormFieldContainer } from './components'
 import Button from '../../components/Button'
 import { validateName, validateOccupation, validateIncome } from './validation'
-import Select, { ValueType, GroupType, OptionTypeBase } from 'react-select'
+import Select from 'react-select'
 
 const SELECT_OPTIONS = [
   { value: 'full_time', label: 'Full Time' },

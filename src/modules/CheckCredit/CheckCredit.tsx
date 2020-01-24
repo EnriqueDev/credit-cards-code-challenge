@@ -1,11 +1,12 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { RaisedContainer } from '../../components/RaisedContainer'
-import TextInput from './TextInput/TextInput'
+import TextInput, { StyledErrorText } from './TextInput/TextInput'
 import Select from 'react-select'
 import Button from '../../components/Button'
+import { validateName, validateOccupation, validateIncome } from './validation'
 
-type SelectOption = {
+export type SelectOption = {
   value: string
   label: string
 }
@@ -15,6 +16,14 @@ const SELECT_OPTIONS: SelectOption[] = [
   { value: 'part_time', label: 'Part Time' },
   { value: 'student', label: 'Student' },
 ]
+
+const SelectContainer = styled.div`
+  position: relative;
+`
+
+const SelectError = styled(StyledErrorText)`
+  bottom: -15px;
+`
 
 const Container = styled.section`
   display: flex;
@@ -34,25 +43,49 @@ const StyledTextInput = styled(TextInput)`
 `
 
 const StyledSelect = styled(Select)`
-  margin-top: 30px;
+  margin-top: 40px;
 `
 
 const StyledButton = styled(Button)`
-  margin-top: 30px;
+  margin-top: 40px;
   width: 100%;
 `
 
 export const CheckCredit: React.FC = () => {
   const [name, setName] = React.useState<string>('')
+  const [nameError, setNameError] = React.useState<string | null>(null)
   const [income, setIncome] = React.useState<string>('')
+  const [incomeError, setIncomeError] = React.useState<string | null>(null)
   const [occupation, setOccupation] = React.useState<SelectOption | null>(null)
+  const [occupationError, setOccupationError] = React.useState<string | null>(
+    null,
+  )
 
   const handleOnSubmit = React.useCallback(
     e => {
       e.preventDefault()
-      console.log('>> name', name)
-      console.log('>> income', income)
-      console.log('>> occupation', occupation)
+      const nameValidationError = validateName(name)
+      nameValidationError
+        ? setNameError(nameValidationError)
+        : setNameError(null)
+
+      const incomeValidationError = validateIncome(income)
+      incomeValidationError
+        ? setIncomeError(incomeValidationError)
+        : setIncomeError(null)
+
+      const occupationValidationError = validateOccupation(occupation)
+      occupationValidationError
+        ? setOccupationError(occupationValidationError)
+        : setOccupationError(null)
+
+      if (
+        !nameValidationError &&
+        !incomeValidationError &&
+        !occupationValidationError
+      ) {
+        console.log('Valid!')
+      }
     },
     [name, income, occupation],
   )
@@ -64,6 +97,7 @@ export const CheckCredit: React.FC = () => {
           label={'Name'}
           placeholder={'John Smith'}
           value={name}
+          error={nameError}
           onChange={e => setName(e.currentTarget.value)}
         />
         <StyledTextInput
@@ -72,13 +106,19 @@ export const CheckCredit: React.FC = () => {
           min={0}
           value={income}
           type={'number'}
+          error={incomeError}
           onChange={e => setIncome(e.currentTarget.value)}
         />
-        <StyledSelect
-          placeholder="Select your occupation"
-          options={SELECT_OPTIONS}
-          onChange={(value: SelectOption) => setOccupation(value)}
-        />
+        <SelectContainer>
+          <StyledSelect
+            placeholder="Select your occupation"
+            options={SELECT_OPTIONS}
+            onChange={(value: SelectOption) => setOccupation(value)}
+          />
+          {Boolean(occupationError) && (
+            <SelectError>{occupationError}</SelectError>
+          )}
+        </SelectContainer>
         <StyledButton onClick={handleOnSubmit}>Submit</StyledButton>
       </RaisedContainer>
     </Container>

@@ -1,5 +1,3 @@
-import { SelectOption } from './CheckCredit'
-
 export const validateName = (name: string): string | null => {
   if (!name) {
     return 'Required'
@@ -30,7 +28,7 @@ export const validateIncome = (amount: string): string | null => {
 }
 
 export const validateOccupation = (
-  occupation: SelectOption | null,
+  occupation: string | null,
 ): string | null => {
   if (!occupation) {
     return 'Please select an occupation'

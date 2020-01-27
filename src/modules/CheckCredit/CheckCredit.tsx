@@ -5,6 +5,13 @@ import { TextInput, FormFieldContainer } from './components'
 import Button from '../../components/Button'
 import { validateName, validateOccupation, validateIncome } from './validation'
 import Select from 'react-select'
+import { useSelector, useDispatch } from 'react-redux'
+import { formDataSelector } from './redux/CheckCredit.selectors'
+import {
+  editCheckCreditField,
+  setFormErrors,
+} from './redux/CheckCredit.actions'
+import { IFormState } from './redux/CheckCredit.reducer'
 
 const SELECT_OPTIONS = [
   { value: 'full_time', label: 'Full Time' },
@@ -34,70 +41,63 @@ const StyledButton = styled(Button)`
 `
 
 export const CheckCredit: React.FC = () => {
-  const [name, setName] = React.useState<string>('')
-  const [nameError, setNameError] = React.useState<string | null>(null)
-  const [income, setIncome] = React.useState<string>('')
-  const [incomeError, setIncomeError] = React.useState<string | null>(null)
-  const [occupation, setOccupation] = React.useState<unknown | null>(null)
-  const [occupationError, setOccupationError] = React.useState<string | null>(
-    null,
+  const { name, income, occupation } = useSelector(formDataSelector)
+  const dispatch = useDispatch()
+
+  const updateValue = React.useCallback(
+    (key: keyof IFormState, value: string) => {
+      dispatch(editCheckCreditField(key, value))
+    },
+    [],
   )
 
   const handleOnSubmit = React.useCallback(
     e => {
       e.preventDefault()
-      const nameValidationError = validateName(name)
-      nameValidationError
-        ? setNameError(nameValidationError)
-        : setNameError(null)
-
-      const incomeValidationError = validateIncome(income)
-      incomeValidationError
-        ? setIncomeError(incomeValidationError)
-        : setIncomeError(null)
-
-      const occupationValidationError = validateOccupation(occupation)
-      occupationValidationError
-        ? setOccupationError(occupationValidationError)
-        : setOccupationError(null)
-
-      if (
-        !nameValidationError &&
-        !incomeValidationError &&
-        !occupationValidationError
-      ) {
-        console.log('Valid!')
+      const errors = {
+        name: validateName(name.value),
+        income: validateIncome(income.value),
+        occupation: validateOccupation(occupation.value),
       }
+
+      if (Object.values(errors).some(value => typeof value === 'string')) {
+        dispatch(setFormErrors(errors))
+        return
+      }
+
+      console.log('>> setFormIs valid')
     },
-    [name, income, occupation],
+    [name.value, income.value, occupation.value, dispatch],
   )
 
   return (
     <Container>
       <RaisedContainer as="form">
-        <StyledFormWrapper label={'Name'} error={nameError}>
+        <StyledFormWrapper label={'Name'} error={name.error}>
           <StyledTextInput
             placeholder={'John Smith'}
-            value={name}
-            onChange={e => setName(e.currentTarget.value)}
+            value={name.value}
+            onChange={e => updateValue('name', e.currentTarget.value)}
           />
         </StyledFormWrapper>
 
-        <StyledFormWrapper label={'Yearly Income'} error={incomeError}>
+        <StyledFormWrapper label={'Yearly Income'} error={income.error}>
           <StyledTextInput
             placeholder={'30000'}
             min={0}
-            value={income}
+            value={income.value}
             type={'number'}
-            onChange={e => setIncome(e.currentTarget.value)}
+            onChange={e => updateValue('income', e.currentTarget.value)}
           />
         </StyledFormWrapper>
 
-        <StyledFormWrapper error={occupationError} label={'Occupation'}>
+        <StyledFormWrapper error={occupation.error} label={'Occupation'}>
           <Select
             placeholder="Select your occupation"
             options={SELECT_OPTIONS}
-            onChange={(value, _) => setOccupation(value)}
+            onChange={value =>
+              updateValue('occupation', (value as any).value as string)
+            }
           />
         </StyledFormWrapper>
 

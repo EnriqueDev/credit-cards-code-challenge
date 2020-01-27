@@ -8,6 +8,8 @@ import { Reset } from './reset.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import { forgeStore } from './store/store'
 import { Provider } from 'react-redux'
+import { ServiceContext } from './contexts/service'
+import { creditCardsEndPoint } from './services/credit'
 
 const store = forgeStore()
 
@@ -15,13 +17,17 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <Provider store={store}>
-        <Router history={browserHistory}>
-          <Reset />
-          <Switch>
-            <Route component={CheckCredit} exact path={checkCredit} />
-            <Route path="*" exact component={NotFound} />
-          </Switch>
-        </Router>
+        <ServiceContext.Provider
+          value={{ creditCardsEndPoint: creditCardsEndPoint }}
+        >
+          <Router history={browserHistory}>
+            <Reset />
+            <Switch>
+              <Route component={CheckCredit} exact path={checkCredit} />
+              <Route path="*" exact component={NotFound} />
+            </Switch>
+          </Router>
+        </ServiceContext.Provider>
       </Provider>
     </ErrorBoundary>
   )

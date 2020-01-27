@@ -1,12 +1,12 @@
 import thunkMiddleware from 'redux-thunk'
 
 export interface IThunkMiddlewareExtraArgument {
-  endpoint: {}
+  creditCardsEndPoint: {}
 }
 
 export const middlewares = [
   // TODO Service implementation placeholder
   thunkMiddleware.withExtraArgument<IThunkMiddlewareExtraArgument>({
-    endpoint: {},
+    creditCardsEndPoint: {},
   }),
 ]

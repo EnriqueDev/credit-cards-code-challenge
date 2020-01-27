@@ -44,7 +44,6 @@ export const checkCreditReducer: Reducer<
 
         keys.forEach(key => {
           const element = data[key]
-
           draft[key].error = element
         })
         break

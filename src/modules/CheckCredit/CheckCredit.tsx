@@ -54,14 +54,18 @@ export const CheckCredit: React.FC = () => {
   const handleOnSubmit = React.useCallback(
     e => {
       e.preventDefault()
-      const errors = {
-        name: validateName(name.value),
-        income: validateIncome(income.value),
-        occupation: validateOccupation(occupation.value),
-      }
+      const nameError = validateName(name.value)
+      const incomeError = validateIncome(income.value)
+      const occupationError = validateOccupation(occupation.value)
 
-      if (Object.values(errors).some(value => typeof value === 'string')) {
-        dispatch(setFormErrors(errors))
+      if (nameError || incomeError || occupationError) {
+        dispatch(
+          setFormErrors({
+            name: nameError,
+            income: incomeError,
+            occupation: occupationError,
+          }),
+        )
         return
       }
 

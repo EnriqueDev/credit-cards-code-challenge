@@ -1,11 +1,18 @@
 import axios from 'axios'
 
-export const creditCardsEndPoint = {
-  checkCreditCards: async (
+export interface ICreditCardsEndpoint {
+  fetchAvailableCreditCards: (
+    income: number,
+    occupation: string,
+  ) => Promise<void>
+}
+
+export const creditCardsEndPoint: ICreditCardsEndpoint = {
+  fetchAvailableCreditCards: async (
     income: number,
     occupation: string,
   ): Promise<void> => {
-    const response = axios.get(
+    const response = await axios.get(
       `http://localhost:4321/cards?income=${income}&occupation=${occupation}`,
     )
 

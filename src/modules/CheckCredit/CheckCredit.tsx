@@ -12,6 +12,7 @@ import {
   setFormErrors,
 } from './redux/CheckCredit.actions'
 import { IFormState } from './redux/CheckCredit.reducer'
+import { fetchCreditData } from './redux/CheckCredit.thunks'
 
 const SELECT_OPTIONS = [
   { value: 'full_time', label: 'Full Time' },
@@ -68,8 +69,7 @@ export const CheckCredit: React.FC = () => {
         )
         return
       }
-
-      console.log('>> setFormIs valid')
+      dispatch(fetchCreditData(occupation.value, parseFloat(income.value)))
     },
     [name.value, income.value, occupation.value, dispatch],
   )

@@ -3,6 +3,23 @@ import { Redirect, RouteChildrenProps, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { startResultPage } from './redux/Result.thunks'
 import { creditCardsSelector } from './redux/Result.selectors'
+import { CardDetails } from './Components/CardDetails'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 1000px;
+  padding: 0 20px;
+  margin: 0 auto;
+`
+
+const StyledCardDetails = styled(CardDetails)`
+  margin-top: 10px;
+
+  &:first-child {
+    margin-top: 30px;
+  }
+`
 
 interface LocationState {
   name: string
@@ -26,5 +43,11 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
     return <Redirect to="/" />
   }
 
-  return <div>{result.map(card => card.name)}</div>
+  return (
+    <Container>
+      {result.map(card => (
+        <StyledCardDetails card={card} />
+      ))}
+    </Container>
+  )
 }

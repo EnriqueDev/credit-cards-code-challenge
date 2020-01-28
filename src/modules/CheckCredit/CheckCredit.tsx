@@ -13,6 +13,7 @@ import {
 } from './redux/CheckCredit.actions'
 import { IFormState } from './redux/CheckCredit.reducer'
 import { fetchCreditData } from './redux/CheckCredit.thunks'
+import { useHistory } from 'react-router-dom'
 
 const SELECT_OPTIONS = [
   { value: 'full_time', label: 'Full Time' },
@@ -44,6 +45,7 @@ const StyledButton = styled(Button)`
 export const CheckCredit: React.FC = () => {
   const { name, income, occupation } = useSelector(formDataSelector)
   const dispatch = useDispatch()
+  const router = useHistory()
 
   const updateValue = React.useCallback(
     (key: keyof IFormState, value: string) => {
@@ -69,7 +71,12 @@ export const CheckCredit: React.FC = () => {
         )
         return
       }
-      dispatch(fetchCreditData(occupation.value, parseFloat(income.value)))
+
+      router.push('/result', {
+        name: name.value,
+        income: income.value,
+        occupation: occupation.value,
+      })
     },
     [name.value, income.value, occupation.value, dispatch],
   )

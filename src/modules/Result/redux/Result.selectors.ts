@@ -5,6 +5,14 @@ export const creditCardsSelector = ({ result }: RootState): ICreditCard[] => {
   return result.cardIds.map(id => result.cards[id])
 }
 
-export const selectedIdsSelector = ({ result }: RootState): number[] => {
-  return result.selectedCardIds
+export const selectedCardsSelector = ({ result }: RootState) => {
+  const selectedIds = result.selectedCardIds
+  return {
+    selectedIds,
+    selectedCards: selectedIds.map(id => result.cards[id]),
+    totalSelected: selectedIds.reduce(
+      (acc, id) => acc + result.cards[id].creditAvailable,
+      0,
+    ),
+  }
 }

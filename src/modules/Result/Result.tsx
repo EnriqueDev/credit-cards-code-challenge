@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { startResultPage } from './redux/Result.thunks'
 import {
   creditCardsSelector,
-  selectedIdsSelector,
+  selectedCardsSelector,
 } from './redux/Result.selectors'
 import { CardDetails } from './components/CardDetails'
 import styled from 'styled-components'
 import { selectResultCard, deselectResultCard } from './redux/Result.actions'
+import { SelectionInfo } from './components/SelectionInfo'
 
 const Container = styled.div`
   width: 100%;
@@ -23,6 +24,10 @@ const StyledCardDetails = styled(CardDetails)`
   &:first-child {
     margin-top: 30px;
   }
+`
+
+const StyledSelectionInfo = styled(SelectionInfo)`
+  margin-top: 40px;
 `
 
 interface LocationState {
@@ -44,7 +49,9 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
   }, [state])
 
   const result = useSelector(creditCardsSelector)
-  const selectedIds = useSelector(selectedIdsSelector)
+  const { selectedIds, totalSelected, selectedCards } = useSelector(
+    selectedCardsSelector,
+  )
 
   if (!state) {
     return <Redirect to="/" />
@@ -67,6 +74,7 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
           />
         )
       })}
+      <StyledSelectionInfo cards={selectedCards} total={totalSelected} />
     </Container>
   )
 }

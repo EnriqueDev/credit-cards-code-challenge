@@ -3,7 +3,7 @@ import { Redirect, RouteChildrenProps, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { startResultPage } from './redux/Result.thunks'
 import { creditCardsSelector } from './redux/Result.selectors'
-import { CardDetails } from './Components/CardDetails'
+import { CardDetails } from './components/CardDetails'
 import styled from 'styled-components'
 
 const Container = styled.div`

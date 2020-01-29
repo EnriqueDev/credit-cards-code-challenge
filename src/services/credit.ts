@@ -8,6 +8,7 @@ export interface ICreditCardsEndpoint {
 }
 
 export type ICreditCard = {
+  id: number
   name: string
   apr: number
   balanceTransferOfferDuration: number

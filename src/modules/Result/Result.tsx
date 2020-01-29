@@ -2,9 +2,13 @@ import React from 'react'
 import { Redirect, RouteChildrenProps, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { startResultPage } from './redux/Result.thunks'
-import { creditCardsSelector } from './redux/Result.selectors'
+import {
+  creditCardsSelector,
+  selectedIdsSelector,
+} from './redux/Result.selectors'
 import { CardDetails } from './components/CardDetails'
 import styled from 'styled-components'
+import { selectResultCard, deselectResultCard } from './redux/Result.actions'
 
 const Container = styled.div`
   width: 100%;
@@ -38,16 +42,31 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
     }
     dispatch(startResultPage(state.income, state.occupation))
   }, [state])
+
   const result = useSelector(creditCardsSelector)
+  const selectedIds = useSelector(selectedIdsSelector)
+
   if (!state) {
     return <Redirect to="/" />
   }
 
   return (
     <Container>
-      {result.map(card => (
-        <StyledCardDetails card={card} />
-      ))}
+      {result.map(card => {
+        const isSelected = selectedIds.includes(card.id)
+        return (
+          <StyledCardDetails
+            onButtonClick={() =>
+              isSelected
+                ? dispatch(deselectResultCard(card.id))
+                : dispatch(selectResultCard(card.id))
+            }
+            isSelected={isSelected}
+            key={card.id}
+            card={card}
+          />
+        )
+      })}
     </Container>
   )
 }

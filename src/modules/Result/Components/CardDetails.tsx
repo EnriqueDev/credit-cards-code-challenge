@@ -56,10 +56,17 @@ const AmountContainer = styled.div`
 
 interface IProps {
   card: ICreditCard
+  isSelected: boolean
+  onButtonClick: () => void
   className?: string
 }
 
-export const CardDetails: React.FC<IProps> = ({ card, className }) => {
+export const CardDetails: React.FC<IProps> = ({
+  card,
+  className,
+  onButtonClick,
+  isSelected = false,
+}) => {
   return (
     <Container className={className}>
       <CardName>{card.name}</CardName>
@@ -82,7 +89,9 @@ export const CardDetails: React.FC<IProps> = ({ card, className }) => {
         </CardValue>
       </ValuesContainer>
       <AmountContainer>
-        <Button>SELECT!</Button>
+        <Button onClick={onButtonClick}>
+          {isSelected ? 'Remove' : 'Select'}
+        </Button>
       </AmountContainer>
     </Container>
   )

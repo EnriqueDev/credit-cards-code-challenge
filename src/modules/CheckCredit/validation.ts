@@ -1,7 +1,40 @@
 import dayjs from 'dayjs'
+import { IFormState } from './redux/CheckCredit.reducer'
 
 type NullableString = string | null
 const REQUIRED_ERROR = 'Required'
+
+export const validateForm = (formData: IFormState) => {
+  const { name, lastName, income, occupation, date, title } = formData
+
+  const nameError = validateName(name.value)
+  const lastNameError = validateName(lastName.value)
+  const incomeError = validateIncome(income.value)
+  const occupationError = validateOccupation(occupation.value)
+  const titleError = validateTitle(title.value)
+  const dateError = validateDate(date.value)
+
+  const hasErrors = Boolean(
+    nameError &&
+      lastNameError &&
+      incomeError &&
+      occupationError &&
+      titleError &&
+      dateError,
+  )
+
+  return {
+    hasErrors,
+    errors: {
+      name: nameError,
+      lastName: lastNameError,
+      income: incomeError,
+      occupation: occupationError,
+      title: titleError,
+      date: dateError,
+    },
+  }
+}
 
 export const validateName = (name: NullableString): NullableString => {
   if (!name) {

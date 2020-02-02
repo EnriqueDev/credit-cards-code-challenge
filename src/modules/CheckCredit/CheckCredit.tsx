@@ -8,13 +8,7 @@ import { TextInput, FormFieldContainer } from './components'
 import Button from '../../components/Button'
 import { IFormState } from './redux/CheckCredit.reducer'
 
-import {
-  validateName,
-  validateOccupation,
-  validateIncome,
-  validateTitle,
-  validateDate,
-} from './validation'
+import { validateForm } from './validation'
 import { formDataSelector } from './redux/CheckCredit.selectors'
 import {
   editCheckCreditField,
@@ -78,30 +72,10 @@ export const CheckCredit: React.FC = () => {
   const handleOnSubmit = React.useCallback(
     e => {
       e.preventDefault()
-      const nameError = validateName(name.value)
-      const lastNameError = validateName(lastName.value)
-      const incomeError = validateIncome(income.value)
-      const occupationError = validateOccupation(occupation.value)
-      const titleError = validateTitle(title.value)
-      const dateError = validateDate(date.value)
+      const { hasErrors, errors } = validateForm(formData)
 
-      if (
-        nameError ||
-        incomeError ||
-        occupationError ||
-        titleError ||
-        lastNameError
-      ) {
-        dispatch(
-          setFormErrors({
-            name: nameError,
-            lastName: lastNameError,
-            income: incomeError,
-            occupation: occupationError,
-            title: titleError,
-            date: dateError,
-          }),
-        )
+      if (hasErrors) {
+        dispatch(setFormErrors(errors))
         return
       }
 

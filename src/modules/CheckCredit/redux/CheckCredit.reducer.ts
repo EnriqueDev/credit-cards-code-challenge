@@ -18,6 +18,9 @@ export interface IFormState {
   name: IFormFieldState
   occupation: IFormFieldState
   income: IFormFieldState
+  title: IFormFieldState
+  lastName: IFormFieldState
+  date: IFormFieldState
 }
 
 export interface ICheckCreditState extends IFormState {}
@@ -26,6 +29,9 @@ const INITIAL_STATE: ICheckCreditState = {
   name: INITIAL_FORM_VALUE,
   occupation: INITIAL_FORM_VALUE,
   income: INITIAL_FORM_VALUE,
+  title: INITIAL_FORM_VALUE,
+  lastName: INITIAL_FORM_VALUE,
+  date: INITIAL_FORM_VALUE,
 }
 
 export const checkCreditReducer: Reducer<

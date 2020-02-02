@@ -1,18 +1,24 @@
-export const validateName = (name: string): string | null => {
+import dayjs from 'dayjs'
+
+type NullableString = string | null
+const REQUIRED_ERROR = 'Required'
+
+export const validateName = (name: NullableString): NullableString => {
   if (!name) {
-    return 'Required'
+    return REQUIRED_ERROR
   }
 
-  if (name.length < 5) {
-    return 'Name is too short'
+  // Some Asian names are just 2 characters long
+  if (name.length < 2) {
+    return 'Min. 2 characters'
   }
 
   return null
 }
 
-export const validateIncome = (amount: string): string | null => {
+export const validateIncome = (amount: NullableString): NullableString => {
   if (!amount) {
-    return 'Required'
+    return REQUIRED_ERROR
   }
 
   try {
@@ -28,10 +34,38 @@ export const validateIncome = (amount: string): string | null => {
 }
 
 export const validateOccupation = (
-  occupation: string | null,
-): string | null => {
+  occupation: NullableString,
+): NullableString => {
   if (!occupation) {
     return 'Please select an occupation'
+  }
+
+  return null
+}
+
+export const validateTitle = (title: NullableString): NullableString => {
+  if (!title) {
+    return REQUIRED_ERROR
+  }
+
+  return null
+}
+
+export const validateDate = (date: NullableString): NullableString => {
+  if (!date) {
+    return REQUIRED_ERROR
+  }
+
+  const dateObject = dayjs(date)
+  const today = dayjs(Date.now())
+  const differenceInYears = today.diff(dateObject, 'year', true)
+
+  if (differenceInYears < 18) {
+    return 'Must be at least 18'
+  }
+
+  if (differenceInYears > 74) {
+    return 'Something is wrong with this date'
   }
 
   return null

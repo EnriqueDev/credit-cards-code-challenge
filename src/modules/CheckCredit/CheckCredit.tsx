@@ -1,40 +1,60 @@
 import * as React from 'react'
-import styled from 'styled-components'
-import { RaisedContainer } from '../../components/RaisedContainer'
+import { useSelector, useDispatch } from 'react-redux'
+import styled, { css } from 'styled-components'
+import { useHistory } from 'react-router-dom'
+import Select from 'react-select'
+
 import { TextInput, FormFieldContainer } from './components'
 import Button from '../../components/Button'
-import { validateName, validateOccupation, validateIncome } from './validation'
-import Select from 'react-select'
-import { useSelector, useDispatch } from 'react-redux'
+import { IFormState } from './redux/CheckCredit.reducer'
+
+import {
+  validateName,
+  validateOccupation,
+  validateIncome,
+  validateTitle,
+  validateDate,
+} from './validation'
 import { formDataSelector } from './redux/CheckCredit.selectors'
 import {
   editCheckCreditField,
   setFormErrors,
 } from './redux/CheckCredit.actions'
-import { IFormState } from './redux/CheckCredit.reducer'
-import { fetchCreditData } from './redux/CheckCredit.thunks'
-import { useHistory } from 'react-router-dom'
 
-const SELECT_OPTIONS = [
-  { value: 'full_time', label: 'Full Time' },
-  { value: 'part_time', label: 'Part Time' },
-  { value: 'student', label: 'Student' },
-]
+import { backgroundColor } from '../../constants/colors'
+import { TITLE_OPTIONS, EMPLOYMENT_STATUS_OPTIONS } from './constants'
 
-const Container = styled.section`
+const Wrapper = styled.section`
   display: flex;
   flex: 1 0 100%;
   height: 100%;
   align-items: center;
   justify-content: center;
+  background-color: ${backgroundColor};
 `
 
-const StyledTextInput = styled(TextInput)`
-  min-width: 250px;
+const Container = styled.form`
+  max-width: 400px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 100px;
+  min-height: 100%;
+  background-color: #fff;
+`
+
+const StyledTextInput = styled(TextInput)<{ marginTop?: number }>`
+  width: 100%;
+
+  ${({ marginTop }) =>
+    marginTop &&
+    css`
+      margin-top: ${marginTop};
+    `}
 `
 
 const StyledFormWrapper = styled(FormFieldContainer)`
-  margin-bottom: 30px;
+  margin-top: 30px;
 `
 
 const StyledButton = styled(Button)`
@@ -43,7 +63,8 @@ const StyledButton = styled(Button)`
 `
 
 export const CheckCredit: React.FC = () => {
-  const { name, income, occupation } = useSelector(formDataSelector)
+  const formData = useSelector(formDataSelector)
+  const { name, lastName, income, occupation, date, title } = formData
   const dispatch = useDispatch()
   const router = useHistory()
 
@@ -58,15 +79,27 @@ export const CheckCredit: React.FC = () => {
     e => {
       e.preventDefault()
       const nameError = validateName(name.value)
+      const lastNameError = validateName(lastName.value)
       const incomeError = validateIncome(income.value)
       const occupationError = validateOccupation(occupation.value)
+      const titleError = validateTitle(title.value)
+      const dateError = validateDate(date.value)
 
-      if (nameError || incomeError || occupationError) {
+      if (
+        nameError ||
+        incomeError ||
+        occupationError ||
+        titleError ||
+        lastNameError
+      ) {
         dispatch(
           setFormErrors({
             name: nameError,
+            lastName: lastNameError,
             income: incomeError,
             occupation: occupationError,
+            title: titleError,
+            date: dateError,
           }),
         )
         return
@@ -78,42 +111,79 @@ export const CheckCredit: React.FC = () => {
         occupation: occupation.value,
       })
     },
-    [name.value, income.value, occupation.value, dispatch],
+    [
+      name.value,
+      income.value,
+      occupation.value,
+      lastName.value,
+      date.value,
+      title.value,
+      dispatch,
+    ],
   )
 
   return (
-    <Container>
-      <RaisedContainer as="form">
-        <StyledFormWrapper label={'Name'} error={name.error}>
+    <Wrapper>
+      <Container>
+        <StyledFormWrapper label={'Title'} error={name.error}>
+          <Select
+            placeholder="Select your title"
+            options={TITLE_OPTIONS}
+            onChange={value =>
+              updateValue('title', (value as any).value as string)
+            }
+          />
+        </StyledFormWrapper>
+        <StyledFormWrapper label={'Name'}>
           <StyledTextInput
-            placeholder={'John Smith'}
+            placeholder={'Daniel'}
             value={name.value}
+            error={name.error}
             onChange={e => updateValue('name', e.currentTarget.value)}
+          />
+
+          <StyledTextInput
+            placeholder={'Schwimmer'}
+            value={lastName.value}
+            marginTop={15}
+            error={lastName.error}
+            onChange={e => updateValue('lastName', e.currentTarget.value)}
           />
         </StyledFormWrapper>
 
-        <StyledFormWrapper label={'Yearly Income'} error={income.error}>
+        <StyledFormWrapper label={'Annual Income'}>
           <StyledTextInput
             placeholder={'30000'}
             min={0}
             value={income.value}
             type={'number'}
+            error={income.error}
             onChange={e => updateValue('income', e.currentTarget.value)}
           />
         </StyledFormWrapper>
 
-        <StyledFormWrapper error={occupation.error} label={'Occupation'}>
+        <StyledFormWrapper label={'Employment Status'}>
           <Select
-            placeholder="Select your occupation"
-            options={SELECT_OPTIONS}
+            placeholder="Select your status"
+            options={EMPLOYMENT_STATUS_OPTIONS}
             onChange={value =>
               updateValue('occupation', (value as any).value as string)
             }
           />
         </StyledFormWrapper>
 
+        <StyledFormWrapper label={'Date of Birth'}>
+          <TextInput
+            type="date"
+            value={date.value}
+            error={date.error}
+            min={'1930-1-1'}
+            onChange={e => updateValue('date', e.currentTarget.value)}
+          />
+        </StyledFormWrapper>
+
         <StyledButton onClick={handleOnSubmit}>Submit</StyledButton>
-      </RaisedContainer>
-    </Container>
+      </Container>
+    </Wrapper>
   )
 }

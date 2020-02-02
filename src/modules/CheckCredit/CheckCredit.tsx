@@ -17,6 +17,7 @@ import {
 
 import { backgroundColor } from '../../constants/colors'
 import { TITLE_OPTIONS, EMPLOYMENT_STATUS_OPTIONS } from './constants'
+import { Dropdown } from './components/Dropdown'
 
 const Wrapper = styled.section`
   display: flex;
@@ -52,7 +53,7 @@ const StyledFormWrapper = styled(FormFieldContainer)`
 `
 
 const StyledButton = styled(Button)`
-  margin-top: 10px;
+  margin-top: 30px;
   width: 100%;
 `
 
@@ -100,12 +101,13 @@ export const CheckCredit: React.FC = () => {
     <Wrapper>
       <Container>
         <StyledFormWrapper label={'Title'} error={name.error}>
-          <Select
+          <Dropdown
             placeholder="Select your title"
             options={TITLE_OPTIONS}
             onChange={value =>
               updateValue('title', (value as any).value as string)
             }
+            error={title.error}
           />
         </StyledFormWrapper>
         <StyledFormWrapper label={'Name'}>
@@ -137,12 +139,13 @@ export const CheckCredit: React.FC = () => {
         </StyledFormWrapper>
 
         <StyledFormWrapper label={'Employment Status'}>
-          <Select
+          <Dropdown
             placeholder="Select your status"
             options={EMPLOYMENT_STATUS_OPTIONS}
             onChange={value =>
               updateValue('occupation', (value as any).value as string)
             }
+            error={occupation.error}
           />
         </StyledFormWrapper>
 

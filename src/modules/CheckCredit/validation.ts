@@ -70,7 +70,7 @@ export const validateOccupation = (
   occupation: NullableString,
 ): NullableString => {
   if (!occupation) {
-    return 'Please select an occupation'
+    return REQUIRED_ERROR
   }
 
   return null

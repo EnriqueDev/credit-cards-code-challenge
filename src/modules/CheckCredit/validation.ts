@@ -119,7 +119,7 @@ export const validatePostCode = (postCode: NullableString): NullableString => {
 
   const testRegex = RegExp(POSTCODE_VALIDATION_REGEXP)
   const isValid = testRegex.test(postCode)
-  console.log(isValid)
+
   if (!isValid) {
     return 'Postcode not valid'
   }

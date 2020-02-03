@@ -1,5 +1,9 @@
 import { ThunkResult } from 'src/store/types'
-import { setResultLoading, setResultData } from './Result.actions'
+import {
+  setResultLoading,
+  setResultData,
+  setResultError,
+} from './Result.actions'
 
 export const startResultPage = (
   income: number,
@@ -14,5 +18,7 @@ export const startResultPage = (
     )
 
     dispatch(setResultData(data))
-  } catch (e) {}
+  } catch (e) {
+    dispatch(setResultError())
+  }
 }

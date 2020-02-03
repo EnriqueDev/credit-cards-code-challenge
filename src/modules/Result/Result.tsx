@@ -5,6 +5,7 @@ import { startResultPage } from './redux/Result.thunks'
 import {
   creditCardsSelector,
   selectedCardsSelector,
+  errorSelector,
 } from './redux/Result.selectors'
 import { CardDetails } from './components/CardDetails'
 import styled from 'styled-components'
@@ -62,6 +63,22 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
   const { selectedIds, totalSelected, selectedCards } = useSelector(
     selectedCardsSelector,
   )
+  const requestFailed = useSelector(errorSelector)
+
+  if (requestFailed) {
+    return (
+      <div>
+        Someting went wrong with the request. <br />
+        We are working on it!
+      </div>
+    )
+  }
+
+  if (!result.length) {
+    return (
+      <div>Unfortunatelly no credit cards are elegible for the given data.</div>
+    )
+  }
 
   return (
     <Page>

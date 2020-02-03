@@ -16,3 +16,7 @@ export const selectedCardsSelector = ({ result }: RootState) => {
     ),
   }
 }
+
+export const errorSelector = ({ result }: RootState) => {
+  return result.requestFailed
+}

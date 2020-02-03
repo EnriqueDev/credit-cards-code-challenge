@@ -1,32 +1,32 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { ICreditCard } from '../../../services/credit'
-import { RaisedContainer } from '../../../components/RaisedContainer'
+import { borderColor } from '../../../constants/colors'
 import Button from '../../../components/Button'
 
-const Container = styled(RaisedContainer)`
+const Container = styled.div`
   display: flex;
-  flex-direction: row;
+  flex: 1 0 auto;
+  padding: 20px;
+  border: 1px solid ${borderColor};
+  border-radius: 5px;
+  flex-direction: column;
 `
 
-const CardValue = styled.div`
-  padding: 15px 20px;
-  position: relative;
+const CardName = styled.strong`
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bolder;
+  padding: 10px;
+`
+
+const Content = styled.div`
   display: flex;
-  max-width: 150px;
-  justify-content: space-between;
   flex-direction: column;
 
-  border-left: 1px solid #ccc;
-`
-
-const CardName = styled.div`
-  padding: 0 30px;
-  flex: 1 0 100px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+  @media only screen and (min-width: 800px) {
+    flex-direction: row;
+  }
 `
 
 const Value = styled.div`
@@ -35,23 +35,42 @@ const Value = styled.div`
   font-weight: bold;
 `
 
-const ValuesContainer = styled.div`
+const Values = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1 0 auto;
-  justify-content: center;
+  justify-content: space-between;
 `
 
-const AmountContainer = styled.div`
+const CardValue = styled.div`
+  padding: 15px 20px 15px 10px;
+  position: relative;
   display: flex;
-  flex: 0 1 150px;
-  align-items: center;
+  max-width: 150px;
+  justify-content: space-around;
   flex-direction: column;
-  justify-content: center;
 
-  color: green;
-  font-weight: bolder;
-  font-size: 20px;
+  border-left: 1px solid #ccc;
+
+  &:first-child {
+    border-left-width: 0;
+  }
+
+  &:last-child {
+    flex: 0 0 auto;
+  }
+`
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  margin-top: 20px;
+
+  @media only screen and (min-width: 800px) {
+    width: 100px;
+    height: 50px;
+    margin: 0 20px;
+    align-self: center;
+  }
 `
 
 interface IProps {
@@ -63,36 +82,36 @@ interface IProps {
 
 export const CardDetails: React.FC<IProps> = ({
   card,
-  className,
+  isSelected,
   onButtonClick,
-  isSelected = false,
+  className,
 }) => {
   return (
     <Container className={className}>
       <CardName>{card.name}</CardName>
-      <ValuesContainer>
-        <CardValue>
-          <p>Balance Transfer offer duration</p>
-          <Value>{card.balanceTransferOfferDuration} months</Value>
-        </CardValue>
-        <CardValue>
-          <p>0% Purchase offer duration</p>
-          <Value>{card.purchaseOfferDuration} months</Value>
-        </CardValue>
-        <CardValue>
-          <p>Rep % APR</p>
-          <Value>{card.apr} %</Value>
-        </CardValue>
-        <CardValue>
-          <p>Credit</p>
-          <Value>£ {card.creditAvailable}</Value>
-        </CardValue>
-      </ValuesContainer>
-      <AmountContainer>
-        <Button onClick={onButtonClick}>
+      <Content>
+        <Values>
+          <CardValue>
+            <p>Balance Transfer offer duration</p>
+            <Value>{card.balanceTransferOfferDuration} months</Value>
+          </CardValue>
+          <CardValue>
+            <p>0% Purchase offer duration</p>
+            <Value>{card.purchaseOfferDuration} months</Value>
+          </CardValue>
+          <CardValue>
+            <p>Rep % APR</p>
+            <Value>{card.apr} %</Value>
+          </CardValue>
+          <CardValue>
+            <p>Credit</p>
+            <Value>£ {card.creditAvailable}</Value>
+          </CardValue>
+        </Values>
+        <StyledButton onClick={onButtonClick}>
           {isSelected ? 'Remove' : 'Select'}
-        </Button>
-      </AmountContainer>
+        </StyledButton>
+      </Content>
     </Container>
   )
 }

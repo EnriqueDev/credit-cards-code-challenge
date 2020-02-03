@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, RouteChildrenProps, useHistory } from 'react-router-dom'
+import { Redirect, RouteChildrenProps } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { startResultPage } from './redux/Result.thunks'
 import {
@@ -11,10 +11,13 @@ import styled from 'styled-components'
 import { selectResultCard, deselectResultCard } from './redux/Result.actions'
 import { SelectionInfo } from './components/SelectionInfo'
 
+const Page = styled.div`
+  min-width: 550px;
+`
+
 const Container = styled.div`
-  width: 100%;
+  padding: 40px 20px;
   max-width: 1000px;
-  padding: 0 20px;
   margin: 0 auto;
 `
 
@@ -41,40 +44,45 @@ export const Result: React.FC<RouteChildrenProps<{}, LocationState>> = ({
 }) => {
   const dispatch = useDispatch()
   const state = location.state
+
+  // Note: this should have been done on click on the previous page,
+  // then an action on redux to start-up this page and finally navigate.
+  // It was done this way only to show hooks knowledge
   React.useEffect(() => {
-    if (!state) {
-      return
+    if (state) {
+      dispatch(startResultPage(state.income, state.occupation))
     }
-    dispatch(startResultPage(state.income, state.occupation))
   }, [state])
+
+  if (!state) {
+    return <Redirect to="/" />
+  }
 
   const result = useSelector(creditCardsSelector)
   const { selectedIds, totalSelected, selectedCards } = useSelector(
     selectedCardsSelector,
   )
 
-  if (!state) {
-    return <Redirect to="/" />
-  }
-
   return (
-    <Container>
-      {result.map(card => {
-        const isSelected = selectedIds.includes(card.id)
-        return (
-          <StyledCardDetails
-            onButtonClick={() =>
-              isSelected
-                ? dispatch(deselectResultCard(card.id))
-                : dispatch(selectResultCard(card.id))
-            }
-            isSelected={isSelected}
-            key={card.id}
-            card={card}
-          />
-        )
-      })}
-      <StyledSelectionInfo cards={selectedCards} total={totalSelected} />
-    </Container>
+    <Page>
+      <Container>
+        {result.map(card => {
+          const isSelected = selectedIds.includes(card.id)
+          return (
+            <StyledCardDetails
+              onButtonClick={() =>
+                isSelected
+                  ? dispatch(deselectResultCard(card.id))
+                  : dispatch(selectResultCard(card.id))
+              }
+              isSelected={isSelected}
+              key={card.id}
+              card={card}
+            />
+          )
+        })}
+        <StyledSelectionInfo cards={selectedCards} total={totalSelected} />
+      </Container>
+    </Page>
   )
 }

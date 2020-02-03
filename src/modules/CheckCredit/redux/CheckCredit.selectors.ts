@@ -9,5 +9,6 @@ export const formDataSelector = ({ checkCredit }: RootState): IFormState => {
     income: checkCredit.income,
     occupation: checkCredit.occupation,
     date: checkCredit.date,
+    postcode: checkCredit.postcode,
   }
 }

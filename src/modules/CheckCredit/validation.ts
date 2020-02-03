@@ -3,9 +3,10 @@ import { IFormState } from './redux/CheckCredit.reducer'
 
 type NullableString = string | null
 const REQUIRED_ERROR = 'Required'
+const POSTCODE_VALIDATION_REGEXT = /^([Gg][Ii][Rr]0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[0-9][A-Za-z]{2})$/
 
 export const validateForm = (formData: IFormState) => {
-  const { name, lastName, income, occupation, date, title } = formData
+  const { name, lastName, income, occupation, date, title, postcode } = formData
 
   const nameError = validateName(name.value)
   const lastNameError = validateName(lastName.value)
@@ -13,13 +14,15 @@ export const validateForm = (formData: IFormState) => {
   const occupationError = validateOccupation(occupation.value)
   const titleError = validateTitle(title.value)
   const dateError = validateDate(date.value)
+  const postCodeError = validatePostCode(postcode.value)
 
   const hasErrors = Boolean(
-    nameError &&
-      lastNameError &&
-      incomeError &&
-      occupationError &&
-      titleError &&
+    nameError ||
+      lastNameError ||
+      incomeError ||
+      occupationError ||
+      titleError ||
+      postCodeError ||
       dateError,
   )
 
@@ -32,6 +35,7 @@ export const validateForm = (formData: IFormState) => {
       occupation: occupationError,
       title: titleError,
       date: dateError,
+      postcode: postCodeError,
     },
   }
 }
@@ -99,6 +103,21 @@ export const validateDate = (date: NullableString): NullableString => {
 
   if (differenceInYears > 74) {
     return 'Something is wrong with this date'
+  }
+
+  return null
+}
+
+const validatePostCode = (postCode: NullableString): NullableString => {
+  if (!postCode) {
+    return REQUIRED_ERROR
+  }
+
+  const isValid = Boolean(
+    postCode.replace(' ', '').match(POSTCODE_VALIDATION_REGEXT),
+  )
+  if (!isValid) {
+    return 'Postcode not valid'
   }
 
   return null

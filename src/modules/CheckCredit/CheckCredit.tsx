@@ -15,17 +15,14 @@ import {
   setFormErrors,
 } from './redux/CheckCredit.actions'
 
-import { backgroundColor } from '../../constants/colors'
 import { TITLE_OPTIONS, EMPLOYMENT_STATUS_OPTIONS } from './constants'
 import { Dropdown } from './components/Dropdown'
 
 const Wrapper = styled.section`
   display: flex;
   flex: 1 0 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
-  background-color: ${backgroundColor};
 `
 
 const Container = styled.form`
@@ -59,7 +56,7 @@ const StyledButton = styled(Button)`
 
 export const CheckCredit: React.FC = () => {
   const formData = useSelector(formDataSelector)
-  const { name, lastName, income, occupation, date, title } = formData
+  const { name, lastName, income, occupation, date, title, postcode } = formData
   const dispatch = useDispatch()
   const router = useHistory()
 
@@ -86,15 +83,7 @@ export const CheckCredit: React.FC = () => {
         occupation: occupation.value,
       })
     },
-    [
-      name.value,
-      income.value,
-      occupation.value,
-      lastName.value,
-      date.value,
-      title.value,
-      dispatch,
-    ],
+    [formData, dispatch],
   )
 
   return (
@@ -127,6 +116,16 @@ export const CheckCredit: React.FC = () => {
           />
         </StyledFormWrapper>
 
+        <StyledFormWrapper label={'Postcode'}>
+          <StyledTextInput
+            placeholder={'SW15 5PU'}
+            value={postcode.value}
+            type={'text'}
+            error={postcode.error}
+            onChange={e => updateValue('postcode', e.currentTarget.value)}
+          />
+        </StyledFormWrapper>
+
         <StyledFormWrapper label={'Annual Income'}>
           <StyledTextInput
             placeholder={'30000'}
@@ -154,7 +153,6 @@ export const CheckCredit: React.FC = () => {
             type="date"
             value={date.value}
             error={date.error}
-            min={'1930-1-1'}
             onChange={e => updateValue('date', e.currentTarget.value)}
           />
         </StyledFormWrapper>

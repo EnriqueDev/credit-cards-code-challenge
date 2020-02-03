@@ -30,7 +30,7 @@ const Container = styled.form`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 0 100px;
+  padding: 40px 100px;
   min-height: 100%;
   background-color: #fff;
 `

@@ -8,7 +8,6 @@ export const startResultPage = (
   dispatch(setResultLoading())
 
   try {
-    console.log('>> ocupation thunk', occupation)
     const data = await creditCardsEndPoint.fetchAvailableCreditCards(
       income,
       occupation,

@@ -77,6 +77,10 @@ export const CheckCredit: React.FC = () => {
         return
       }
 
+      // Note: the API call should have been done here, but to show
+      // hooks knowledge it was done on the result screen. In a real world application
+      // this would not be correct because it wount allow us to send feedback to the user
+      // in case the request fails.
       router.push('/result', {
         name: name.value,
         income: income.value,

@@ -6,6 +6,7 @@ import {
   SET_RESULT_DATA,
   SELECT_RESULT_CARD,
   DESELECT_RESULT_CARD,
+  SET_RESULT_ERROR,
 } from './Result.actions'
 import { ICreditCard } from '../../../services/credit'
 
@@ -16,6 +17,7 @@ export interface IResultReducerState {
   cards: CreditCardsById
   cardIds: number[]
   selectedCardIds: number[]
+  requestFailed: boolean
 }
 
 export const INITIAL_STATE: IResultReducerState = {
@@ -23,6 +25,7 @@ export const INITIAL_STATE: IResultReducerState = {
   cards: {},
   cardIds: [],
   selectedCardIds: [],
+  requestFailed: false,
 }
 
 export const resultReducer: Reducer<IResultReducerState, ResultActions> = (
@@ -33,6 +36,10 @@ export const resultReducer: Reducer<IResultReducerState, ResultActions> = (
     switch (action.type) {
       case SET_RESULT_LOADING:
         draft.isLoading = true
+        break
+
+      case SET_RESULT_ERROR:
+        draft.requestFailed = true
         break
 
       case SELECT_RESULT_CARD:

@@ -3,7 +3,7 @@ import { IFormState } from './redux/CheckCredit.reducer'
 
 type NullableString = string | null
 const REQUIRED_ERROR = 'Required'
-const POSTCODE_VALIDATION_REGEXT = /^([Gg][Ii][Rr]0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[0-9][A-Za-z]{2})$/
+const POSTCODE_VALIDATION_REGEXP = /^([A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/
 
 export const validateForm = (formData: IFormState) => {
   const { name, lastName, income, occupation, date, title, postcode } = formData
@@ -58,16 +58,17 @@ export const validateIncome = (amount: NullableString): NullableString => {
     return REQUIRED_ERROR
   }
 
-  try {
-    const floatAmount = parseFloat(amount)
-    if (floatAmount < 0) {
-      return 'Income cannot be negative'
-    }
+  const floatAmount = parseFloat(amount)
 
-    return null
-  } catch (_) {
+  if (isNaN(floatAmount)) {
     return 'Income must be a number'
   }
+
+  if (floatAmount < 0) {
+    return 'Income cannot be negative'
+  }
+
+  return null
 }
 
 export const validateOccupation = (
@@ -88,34 +89,37 @@ export const validateTitle = (title: NullableString): NullableString => {
   return null
 }
 
-export const validateDate = (date: NullableString): NullableString => {
+export const validateDate = (
+  date: NullableString,
+  now: number = Date.now(),
+): NullableString => {
   if (!date) {
     return REQUIRED_ERROR
   }
 
   const dateObject = dayjs(date)
-  const today = dayjs(Date.now())
+  const today = dayjs(now)
   const differenceInYears = today.diff(dateObject, 'year', true)
 
   if (differenceInYears < 18) {
     return 'Must be at least 18'
   }
 
-  if (differenceInYears > 74) {
+  if (differenceInYears > 75) {
     return 'Something is wrong with this date'
   }
 
   return null
 }
 
-const validatePostCode = (postCode: NullableString): NullableString => {
+export const validatePostCode = (postCode: NullableString): NullableString => {
   if (!postCode) {
     return REQUIRED_ERROR
   }
 
-  const isValid = Boolean(
-    postCode.replace(' ', '').match(POSTCODE_VALIDATION_REGEXT),
-  )
+  const testRegex = RegExp(POSTCODE_VALIDATION_REGEXP)
+  const isValid = testRegex.test(postCode)
+  console.log(isValid)
   if (!isValid) {
     return 'Postcode not valid'
   }

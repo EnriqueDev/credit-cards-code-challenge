@@ -44,16 +44,12 @@ export const resultReducer: Reducer<IResultReducerState, ResultActions> = (
         break
 
       case DESELECT_RESULT_CARD:
-        if (
-          !draft.selectedCardIds.length ||
-          !draft.selectedCardIds.includes(action.payload)
-        ) {
+        const selectedIds = draft.selectedCardIds
+        if (!selectedIds.length || !selectedIds.includes(action.payload)) {
           throw new Error('Attempted to remove a nonexisting element')
         }
-        // TODO use splice
-        draft.selectedCardIds = draft.selectedCardIds.filter(
-          id => id !== action.payload,
-        )
+
+        draft.selectedCardIds.splice(selectedIds.indexOf(action.payload), 1)
         break
 
       case SET_RESULT_DATA:

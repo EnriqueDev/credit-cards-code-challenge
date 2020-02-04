@@ -1,14 +1,15 @@
 {
-  "name": "react-parcel-typescript-starter",
-  "version": "0.0.1",
-  "description": "React typescript with parcel bundler",
-  "main": "index.js",
-  "repository": "https://github.com/overnight-dev/react-parcel-typescript-starter.git",
-  "author": "Enrique Martín García <enriquem.developer@gmail.com>",
+  "name": "credit-cards-challenge",
+  "version": "1.0.0",
+  "description": "Credit cards check challenge!",
+  "main": "src/index.html",
+  "repository": "https://github.com/EnriqueDev/credit-cards-challenge",
+  "author": "Enrique Martín García <enrique@emartin.dev>",
   "license": "MIT",
   "scripts": {
     "start": "parcel src/index.html",
-    "test": "jest"
+    "test": "jest",
+    "buil:prod": "parcel build src/index.html"
   },
   "dependencies": {
     "axios": "^0.19.2",

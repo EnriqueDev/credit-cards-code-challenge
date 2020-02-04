@@ -5,7 +5,7 @@
 This projects depends on a Backend Application which can be found at:
 
 ```
-https://github.com/EnriqueDev/totallymoney-code-challenge-be
+https://github.com/EnriqueDev/credit-cards-code-challenge-be
 ```
 
 Please follow the instructions there before running this application.
